@@ -4,7 +4,7 @@ const fs = require("fs")
 
 const app = new express()
 
-const FILE_SAVE_DIR = "/Users/shesw/Sheswland/uploads/"
+const FILE_SAVE_DIR = "/Users/shesw/Sheswland/uploads"
 
 app.get('/home', (req, res) => {
     res.send('home service')
@@ -22,25 +22,28 @@ app.post("/upload", function (req, res) {
     // form.maxFilesSize = 1 * 1024 * 1024;
     form.parse(req)
 
+    var fileHandler = FileHander()
+
     form.on('field', (name, value) => { // 接收到数据参数时，触发field事件
+        console.log('on field')
         console.log(name, value)
+        if (name == 'saveDir') {
+            fileHandler.saveDir = value
+            if (fileHandler.saveDir == null || fileHandler.saveDir == '' || fileHandler.saveDir == undefined) {
+                fileHandler.saveDir = '/'
+            }
+            fileHandler.handle()
+        }
     })
 
     form.on('file', (name, file, ...rest) => { // 接收到文件参数时，触发file事件
+        console.log('on file')
         console.log(name, file)
 
-        var originalFilename = file.originalFilename
-
-        if (fs.existsSync(FILE_SAVE_DIR + originalFilename)) {
-            fs.unlink(file.path, function (error) {
-                console.log('unlink, error=' + error)
-            })
-        } else {
-            fs.rename(file.path, FILE_SAVE_DIR + originalFilename, function (error) {
-                console.log('rename, error=' + error)
-            })
-        }
-
+        fileHandler.originalFilename = file.originalFilename
+        fileHandler.filePath = file.path
+        fileHandler.handle()
+        res.end()
     })
 
     form.on('close', () => { // 表单数据解析完成，触发close事件
@@ -51,3 +54,43 @@ app.post("/upload", function (req, res) {
 app.listen(7777, () => {
     console.log("home service")
 })
+
+function FileHander() {
+
+    var obj = new Object
+    obj.saveDir = ''
+    obj.filePath = ''
+    obj.originalFilename = ''
+
+    obj.handle = function () {
+        console.log('saveDir=' + obj.saveDir + ", filePath=" + obj.filePath)
+
+        if (obj.saveDir == null || obj.saveDir == '' || obj.saveDir == undefined) {
+            return
+        }
+        if (obj.filePath == null || obj.filePath == '' || obj.filePath == undefined) {
+            return
+        }
+        if (obj.originalFilename == null || obj.originalFilename == '' || obj.originalFilename == undefined) {
+            return
+        }
+
+        var distDir = FILE_SAVE_DIR + obj.saveDir
+
+        if (!fs.existsSync(distDir)) {
+            fs.mkdirSync(distDir)
+        }
+
+        if (fs.existsSync(distDir + obj.originalFilename)) {
+            fs.unlink(obj.filePath, function (error) {
+                console.log('unlink, error=' + error)
+            })
+        } else {
+            fs.rename(obj.filePath, distDir + obj.originalFilename, function (error) {
+                console.log('rename, error=' + error)
+            })
+        }
+    }
+
+    return obj
+}
