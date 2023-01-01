@@ -4,12 +4,14 @@ const fs = require("fs")
 
 const app = new express()
 
-const FILE_SAVE_DIR = "/Users/shesw/Sheswland/uploads"
+const FILE_SAVE_DIR = "/Users/shesw/Sheswland/HomeService/public/uploads"
 
 app.get('/home', (req, res) => {
     res.send('home service')
     res.end()
 })
+
+app.use('/public', express.static('public'))
 
 app.post("/upload", function (req, res) {
     try {
