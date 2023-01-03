@@ -60,6 +60,10 @@ app.post("/upload", function (req, res) {
 
 });
 
+app.get('/downloadapk', (req, res)=>{
+    res.download('E:/test.txt', 'target.apk')
+})
+
 app.listen(7777, () => {
     console.log("home service")
 })
