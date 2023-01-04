@@ -5,8 +5,6 @@ const device_config = require('./device_configs')
 
 const app = new express()
 
-const FILE_SAVE_DIR = device_config.FILE_SAVE_DIR
-
 app.get('/home', (req, res) => {
     res.send('home service')
     res.end()
@@ -21,7 +19,7 @@ app.post("/upload", function (req, res) {
         // 设置编码 
         form.encoding = 'utf-8';
         // 设置文件存储路径，以当前编辑的文件为相对路径
-        form.uploadDir = FILE_SAVE_DIR;
+        form.uploadDir = device_config.FILE_SAVE_DIR;
         // 设置文件大小限制
         // form.maxFilesSize = 1 * 1024 * 1024;
         form.parse(req)
@@ -62,7 +60,8 @@ app.post("/upload", function (req, res) {
 });
 
 app.get('/downloadapk', (req, res) => {
-    res.download('E:/test.txt', 'target.apk')
+    console.log(device_config.APK_DOWNLOAD_PATH)
+    res.download(device_config.APK_DOWNLOAD_PATH, 'FLHS.apk')
 })
 
 app.listen(7777, () => {
@@ -89,7 +88,7 @@ function FileHander() {
             return
         }
 
-        var distDir = FILE_SAVE_DIR + obj.saveDir
+        var distDir = device_config.FILE_SAVE_DIR + obj.saveDir
 
         if (!fs.existsSync(distDir)) {
             fs.mkdirSync(distDir)
