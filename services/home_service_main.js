@@ -1,10 +1,11 @@
 const express = require('express')
 const multiparty = require('multiparty')
 const fs = require("fs")
+const device_config = require('./device_configs')
 
 const app = new express()
 
-const FILE_SAVE_DIR = "F:/home_service/HomeService/public/uploads"
+const FILE_SAVE_DIR = device_config.FILE_SAVE_DIR
 
 app.get('/home', (req, res) => {
     res.send('home service')
@@ -60,7 +61,7 @@ app.post("/upload", function (req, res) {
 
 });
 
-app.get('/downloadapk', (req, res)=>{
+app.get('/downloadapk', (req, res) => {
     res.download('E:/test.txt', 'target.apk')
 })
 
