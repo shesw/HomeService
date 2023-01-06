@@ -2,6 +2,7 @@ const express = require('express')
 const multiparty = require('multiparty')
 const fs = require("fs")
 const device_config = require('./device_configs')
+const path = require('path')
 
 const app = new express()
 
@@ -62,6 +63,11 @@ app.post("/upload", function (req, res) {
 app.get('/downloadapk', (req, res) => {
     console.log(device_config.APK_DOWNLOAD_PATH)
     res.download(device_config.APK_DOWNLOAD_PATH, 'FLHS.apk')
+})
+
+app.get('/download/*', (req, res) => {
+    console.log('path=' + req.params[0])
+    res.download(req.params[0])
 })
 
 app.listen(7777, () => {
