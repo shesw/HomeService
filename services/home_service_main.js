@@ -70,6 +70,18 @@ app.get('/download/*', (req, res) => {
     res.download(req.params[0])
 })
 
+app.get('/downloadDefault', (req, res) => {
+    console.log('download default, path=' + device_config.DEFAULT_DOWNLOAD_PATH)
+
+    var files = fs.readdirSync(device_config.DEFAULT_DOWNLOAD_PATH)
+
+    files.forEach((f) => {
+        var file = device_config.DEFAULT_DOWNLOAD_PATH + f
+        console.log(file)
+        res.download(file)
+    })
+})
+
 app.listen(7777, () => {
     console.log("home service")
 })
