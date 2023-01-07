@@ -1,8 +1,9 @@
 const express = require('express')
 const multiparty = require('multiparty')
 const fs = require("fs")
-const device_config = require('./device_configs')
+const device_config = require('../src/settings/device_configs')
 const path = require('path')
+const compress_utils = require('../src/utils/compress_utils')
 
 const app = new express()
 
@@ -75,11 +76,15 @@ app.get('/downloadDefault', (req, res) => {
 
     var files = fs.readdirSync(device_config.DEFAULT_DOWNLOAD_PATH)
 
-    files.forEach((f) => {
-        var file = device_config.DEFAULT_DOWNLOAD_PATH + f
-        console.log(file)
-        res.download(file)
-    })
+    if (files.length == 0) {
+        res.end()
+    } else if (files.length == 1) {
+        res.download(device_config.DEFAULT_DOWNLOAD_PATH + "/" + files[0])
+    } else {
+        compress_utils.compressDir(device_config.DEFAULT_DOWNLOAD_PATH, () => {
+            res.download(device_config.DEFAULT_DOWNLOAD_PATH + ".zip")
+        })
+    }
 })
 
 app.listen(7777, () => {

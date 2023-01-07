@@ -4,5 +4,5 @@ module.exports = {
 
     FILE_SAVE_DIR: HOME_DIR + "/public/uploads",
     APK_DOWNLOAD_PATH: HOME_DIR + "/public/downloads/FLHS.apk",
-    DEFAULT_DOWNLOAD_PATH: HOME_DIR + "/public/downloadDefault/"
+    DEFAULT_DOWNLOAD_PATH: HOME_DIR + "/public/downloadDefault"
 }
