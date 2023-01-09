@@ -119,11 +119,17 @@ function FileHander() {
             fs.unlink(obj.filePath, function (error) {
                 console.log('unlink, error=' + error)
             })
-        } else {
-            fs.rename(obj.filePath, distDir + obj.originalFilename, function (error) {
-                console.log('rename, error=' + error)
-            })
         }
+
+        fs.rename(obj.filePath, distDir + obj.originalFilename, function (error) {
+            console.log('rename, error=' + error)
+        })
+
+        compress_utils.unzip(distDir + obj.originalFilename, () => {
+            fs.unlink(distDir + obj.originalFilename, function (error) {
+                console.log('unlink, error=' + error)
+            })
+        })
     }
 
     return obj
