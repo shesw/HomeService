@@ -78,8 +78,6 @@ app.get('/downloadDefault', (req, res) => {
 
     if (files.length == 0) {
         res.end()
-    } else if (files.length == 1) {
-        res.download(device_config.DEFAULT_DOWNLOAD_PATH + "/" + files[0])
     } else {
         compress_utils.compressDir(device_config.DEFAULT_DOWNLOAD_PATH, () => {
             res.download(device_config.DEFAULT_DOWNLOAD_PATH + ".zip")
