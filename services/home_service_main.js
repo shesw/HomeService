@@ -4,6 +4,7 @@ const fs = require("fs")
 const device_config = require('../src/settings/device_configs')
 const path = require('path')
 const compress_utils = require('../src/utils/compress_utils')
+const os = require('os')
 
 const app = new express()
 
@@ -86,8 +87,21 @@ app.get('/downloadDefault', (req, res) => {
 })
 
 app.listen(7777, () => {
-    console.log("home service")
+    console.log("home service, " + getIpAddress() + ":7777")
 })
+
+function getIpAddress() {
+    var interfaces = os.networkInterfaces();
+    for (var devName in interfaces) {
+        var iface = interfaces[devName]
+        for (var i = 0; i < iface.length; i++) {
+            var alias = iface[i];
+            if (alias.family == 'IPv4' && alias.address !== '127.0.0.1' && !alias.internal) {
+                return alias.address;
+            }
+        }
+    }
+}
 
 function FileHander() {
 
