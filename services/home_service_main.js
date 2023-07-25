@@ -13,6 +13,13 @@ app.get('/home', (req, res) => {
     res.end()
 })
 
+app.get('/text', (req, res) => {
+    var t = req.query.t
+    console.log(t)
+    res.send()
+    res.end()
+})
+
 app.use('/public', express.static('public'))
 
 app.post("/upload", function (req, res) {
