@@ -74,9 +74,10 @@ app.get('/downloadapk', (req, res) => {
     res.download(device_config.APK_DOWNLOAD_PATH, 'FLHS.apk')
 })
 
-app.get('/download/*', (req, res) => {
-    console.log('path=' + req.params[0])
-    res.download(req.params[0])
+app.get('/download', (req, res) => {
+    var targetFileName = req.query.n
+    console.log('path=' + targetFileName)
+    res.download(device_config.FILE_DOWNLOAD_DIR + "/" + targetFileName, targetFileName)
 })
 
 app.get('/downloadDefault', (req, res) => {
