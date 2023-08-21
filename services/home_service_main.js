@@ -5,8 +5,16 @@ const device_config = require('../src/settings/device_configs')
 const path = require('path')
 const compress_utils = require('../src/utils/compress_utils')
 const os = require('os')
+const bodyParser = require('body-parser');
+
 
 const app = new express()
+
+// 解析 application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// 解析 application/json
+app.use(bodyParser.json());
 
 app.get('/home', (req, res) => {
     res.send('home service')
@@ -16,11 +24,16 @@ app.get('/home', (req, res) => {
 app.get('/text', (req, res) => {
     var t = req.query.t
     console.log(t)
-    res.send()
+    res.send('t=' + "t, extra=" + "https://www.lofter.com/cms/2072/lofterNEJSBridgeTest.html")
     res.end()
 })
 
 app.use('/public', express.static('public'))
+
+app.post('/log', function(req, res){
+    console.log(decodeURIComponent(req.body.logString))
+    res.end()
+})
 
 app.post("/upload", function (req, res) {
     try {
