@@ -1,6 +1,6 @@
-const HOME_DIR = "/Users/shesw/Sheswland/HomeService"
+// const HOME_DIR = "/Users/shesw/Sheswland/HomeService"
+const HOME_DIR = "F:/home_service/HomeService"
 module.exports = {
-    // FILE_SAVE_DIR: "F:/home_service/HomeService/public/uploads"
 
     FILE_SAVE_DIR: HOME_DIR + "/public/uploads",
     FILE_DOWNLOAD_DIR: HOME_DIR + "/public/downloads",
