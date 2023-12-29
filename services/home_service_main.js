@@ -5,8 +5,10 @@ const device_config = require('../src/settings/device_configs')
 const path = require('path')
 const compress_utils = require('../src/utils/compress_utils')
 const os = require('os')
+
 const bodyParser = require('body-parser');
 
+const { urlencoded } = require('express')
 
 const app = new express()
 
@@ -159,8 +161,10 @@ function FileHander() {
             if (obj.originalFilename == null || obj.originalFilename == '' || obj.originalFilename == undefined) {
                 return
             }
+
+            var trueDir = decodeURIComponent(obj.saveDir)
     
-            var distDir = device_config.FILE_SAVE_DIR + obj.saveDir
+            var distDir = device_config.FILE_SAVE_DIR + "/" + trueDir + "/" 
     
             try {
                 if (!fs.existsSync(distDir)) {
