@@ -2,8 +2,8 @@ const express = require('express')
 const multiparty = require('multiparty')
 const fs = require("fs")
 const device_config = require('../src/settings/device_configs')
-const path = require('path')
 const compress_utils = require('../src/utils/compress_utils')
+const file_utils = require('../src/utils/file_utils')
 const os = require('os')
 
 const bodyParser = require('body-parser');
@@ -65,6 +65,7 @@ app.post("/upload", function (req, res) {
             res.send('fileHandler is null')
             req.end()
         }
+        console.log('on start')
 
         form.on('field', (name, value) => { // 接收到数据参数时，触发field事件
             console.log('on field')
@@ -165,11 +166,16 @@ function FileHander() {
             var trueDir = decodeURIComponent(obj.saveDir)
     
             var distDir = device_config.FILE_SAVE_DIR + "/" + trueDir + "/" 
+
+            while(distDir.indexOf("//") > 0)  {
+                distDir = distDir.replace("//", "/")
+            }
     
+            console.log("distDir, " + distDir)
+
             try {
-                if (!fs.existsSync(distDir)) {
-                    fs.mkdirSync(distDir)
-                }
+
+                file_utils.mkdirs(distDir)
         
                 if (fs.existsSync(distDir + obj.originalFilename)) {
                     fs.unlink(obj.filePath, function (error) {
