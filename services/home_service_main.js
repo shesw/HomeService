@@ -1,6 +1,7 @@
 const express = require('express')
 const multiparty = require('multiparty')
 const fs = require("fs")
+const path = require("path")
 const device_config = require('../src/settings/device_configs')
 const compress_utils = require('../src/utils/compress_utils')
 const file_utils = require('../src/utils/file_utils')
@@ -8,7 +9,9 @@ const os = require('os')
 
 const bodyParser = require('body-parser');
 
-const { urlencoded } = require('express')
+const {
+    urlencoded
+} = require('express')
 
 const app = new express()
 
@@ -147,15 +150,15 @@ function getIpAddress() {
 }
 
 function FileHander() {
-    try  {
+    try {
         var obj = new Object
         obj.saveDir = ''
         obj.filePath = ''
         obj.originalFilename = ''
-    
+
         obj.handle = function () {
             console.log('saveDir=' + obj.saveDir + ", filePath=" + obj.filePath)
-    
+
             if (obj.saveDir == null || obj.saveDir == '' || obj.saveDir == undefined) {
                 return
             }
@@ -167,39 +170,39 @@ function FileHander() {
             }
 
             var trueDir = decodeURIComponent(obj.saveDir)
-    
-            var distDir = device_config.FILE_SAVE_DIR + "/" + trueDir + "/" 
 
-            while(distDir.indexOf("//") > 0)  {
+            var distDir = device_config.FILE_SAVE_DIR + "/" + trueDir + "/"
+
+            while (distDir.indexOf("//") > 0) {
                 distDir = distDir.replace("//", "/")
             }
-    
+
             console.log("distDir, " + distDir)
 
             try {
 
                 file_utils.mkdirs(distDir)
-        
+
                 if (fs.existsSync(distDir + obj.originalFilename)) {
                     fs.unlink(obj.filePath, function (error) {
                         console.log('unlink, error=' + error)
                     })
                 }
-        
+
                 fs.rename(obj.filePath, distDir + obj.originalFilename, function (error) {
                     console.log('rename, error=' + error)
                 })
-        
+
                 compress_utils.unzip(distDir + obj.originalFilename, () => {
                     fs.unlink(distDir + obj.originalFilename, function (error) {
                         console.log('unlink, error=' + error)
                     })
                 })
-            } catch(e) {
+            } catch (e) {
                 console.log(e)
             }
         }
-    
+
         return obj
     } catch (e) {
         console.log(e)
