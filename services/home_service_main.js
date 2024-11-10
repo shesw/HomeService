@@ -221,8 +221,8 @@ function walkDirectory(directory, map) {
         } else {
             // 输出文件名
             console.log(fullPath);
-            var fp = fullPath.replace("\\", "/")
-            var sp = splitPath(fullPath)
+            var fp = fullPath.replaceAll("\\", "/")
+            var sp = splitPath(fp)
             if (!(sp[0] in map) || map[sp[0]] == null || map[sp[0]] == undefined) {
                 map[sp[0]] = []
             }
@@ -233,5 +233,5 @@ function walkDirectory(directory, map) {
 
 function splitPath(path) {
     var lio = path.lastIndexOf("/")
-    return [path.substring(0, lio + 1), path.substring(lio + 1)]
+    return [path.substring(path.indexOf('/public/'), lio + 1), path.substring(lio + 1)]
 }
