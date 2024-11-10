@@ -1,4 +1,4 @@
-const HOME_DIR = "/Users/chenshengliang/HomeService"
+const HOME_DIR = "/Users/shesw/Sheswland/HomeService"
 module.exports = {
     // FILE_SAVE_DIR: "F:/home_service/HomeService/public/uploads"
 

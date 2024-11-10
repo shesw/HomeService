@@ -11,7 +11,9 @@ const bodyParser = require('body-parser');
 const app = new express()
 
 // 解析 application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
 
 // 解析 application/json
 app.use(bodyParser.json());
@@ -28,9 +30,11 @@ app.get('/text', (req, res) => {
     res.end()
 })
 
-app.use('/public', express.static('public'))
+// app.use('/public', express.static('public'))
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
-app.post('/log', function(req, res){
+
+app.post('/log', function (req, res) {
     console.log(decodeURIComponent(req.body.logString))
     res.end()
 })
