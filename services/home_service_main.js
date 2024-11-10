@@ -10,6 +10,8 @@ const bodyParser = require('body-parser');
 
 const app = new express()
 
+app.use('/public', express.static('public'))
+
 // 解析 application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({
     extended: false
@@ -30,9 +32,10 @@ app.get('/text', (req, res) => {
     res.end()
 })
 
-// app.use('/public', express.static('public'))
-app.use('/public', express.static(path.join(__dirname, 'public')));
-
+app.get('/walk_public', (req, res) => {
+    walkDirectory('public')
+    res.end()
+})
 
 app.post('/log', function (req, res) {
     console.log(decodeURIComponent(req.body.logString))
@@ -172,4 +175,17 @@ function FileHander() {
     }
 
     return obj
+}
+
+function walkDirectory(directory) {
+    fs.readdirSync(directory).forEach(file => {
+        const fullPath = path.join(directory, file);
+        if (fs.lstatSync(fullPath).isDirectory()) {
+            // 递归遍历子目录
+            walkDirectory(fullPath);
+        } else {
+            // 输出文件名
+            console.log(fullPath);
+        }
+    });
 }
