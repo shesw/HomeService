@@ -221,6 +221,7 @@ function walkDirectory(directory, map) {
         } else {
             // 输出文件名
             console.log(fullPath);
+            var fp = fullPath.replace("\\", "/")
             var sp = splitPath(fullPath)
             if (!(sp[0] in map) || map[sp[0]] == null || map[sp[0]] == undefined) {
                 map[sp[0]] = []
