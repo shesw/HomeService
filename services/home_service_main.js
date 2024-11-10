@@ -44,7 +44,9 @@ app.get('/text', (req, res) => {
 })
 
 app.get('/walk_public', (req, res) => {
-    walkDirectory('public')
+    var map = {}
+    walkDirectory('public', map)
+    res.send(map)
     res.end()
 })
 
@@ -210,15 +212,25 @@ function FileHander() {
     return null
 }
 
-function walkDirectory(directory) {
+function walkDirectory(directory, map) {
     fs.readdirSync(directory).forEach(file => {
         const fullPath = path.join(directory, file);
         if (fs.lstatSync(fullPath).isDirectory()) {
             // 递归遍历子目录
-            walkDirectory(fullPath);
+            walkDirectory(fullPath, map);
         } else {
             // 输出文件名
             console.log(fullPath);
+            var sp = splitPath(fullPath)
+            if (!(sp[0] in map) || map[sp[0]] == null || map[sp[0]] == undefined) {
+                map[sp[0]] = []
+            }
+            map[sp[0]].push(sp[1])
         }
     });
+}
+
+function splitPath(path) {
+    var lio = path.lastIndexOf("/")
+    return [path.substring(0, lio + 1), path.substring(lio + 1)]
 }
