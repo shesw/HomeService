@@ -45,7 +45,7 @@ app.get('/text', (req, res) => {
 
 app.get('/walk_public', (req, res) => {
     var map = {}
-    walkDirectory('public', map)
+    walkDirectory(device_config.PUBLIC_HOME, map)
     res.send(map)
     res.end()
 })
