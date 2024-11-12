@@ -6,6 +6,11 @@ const device_config = require('../src/settings/device_configs')
 const compress_utils = require('../src/utils/compress_utils')
 const file_utils = require('../src/utils/file_utils')
 const os = require('os')
+const {
+    HttpAdapter,
+    FsAdapter,
+    expressSharp
+} = require('express-sharp');
 
 const bodyParser = require('body-parser');
 
@@ -16,6 +21,18 @@ const {
 const app = new express()
 
 app.use('/public', express.static('public'))
+
+// app.use(
+//     '/fs_endpoint',
+//     expressSharp({
+//         imageAdapter: new HttpAdapter({
+//             prefixUrl: 'http://192.168.5.3:7777/public',
+//         }),
+//     })
+// )
+app.use('/fs_endpoint', expressSharp({
+    imageAdapter: new FsAdapter(device_config.PUBLIC_HOME)
+}));
 
 // 解析 application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({
