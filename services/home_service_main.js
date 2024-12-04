@@ -17,6 +17,7 @@ const bodyParser = require('body-parser');
 const {
     urlencoded
 } = require('express')
+const delete_duplicates = require('../src/utils/delete_duplicates')
 
 const app = new express()
 
@@ -47,6 +48,13 @@ const maxLimit = '500mb'
 
 // app.use(express.json({ limit: maxLimit}));
 // app.use(express.urlencoded({ limit: maxLimit, extended: true }));
+
+app.get('/delete_duplicates', (req, res)=>{
+    d = req.query.d
+    delete_duplicates.run(device_config.PUBLIC_HOME + path.sep + d)
+    res.send("delete_duplicates done")
+    res.end()
+})
 
 app.get('/home', (req, res) => {
     res.send('home service')
